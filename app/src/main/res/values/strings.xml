@@ -5,11 +5,11 @@
     <string name="search_for_drawing">Search for drawing</string>
     <string name="rename_drawing">Rename drawing</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
-    <string name="enter_width">Enter width</string>
-    <string name="enter_height">Enter height</string>
+    <string name="enter_width">Enter width (1–80)</string>
+    <string name="enter_height">Enter height (1–80)</string>
     <string name="MG">Move grid</string>
     <string name="EP">Erase pixel</string>
     <string name="zoom_out">Zoom Out</string>
@@ -17,4 +17,5 @@
     <string name="color_1">Color 1</string>
     <string name="color_2">Color 2</string>
     <string name="color_3">Color 3</string>
+    <string name="save">Save</string>
 </resources>

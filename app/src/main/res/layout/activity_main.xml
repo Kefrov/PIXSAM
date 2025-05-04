@@ -110,4 +110,17 @@
             android:scaleType="centerInside"
             android:src="@drawable/erase" />
     </LinearLayout>
+
+    <!-- Save button at top-end -->
+    <ImageButton
+        android:id="@+id/save_button"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/save"
+        android:scaleType="centerInside"
+        android:src="@drawable/save" />
+
 </FrameLayout>

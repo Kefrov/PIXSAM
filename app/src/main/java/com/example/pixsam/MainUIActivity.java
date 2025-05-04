@@ -22,8 +22,8 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class MainUIActivity extends AppCompatActivity {
 
-    private static final int ROWS = 80;
-    private static final int COLUMNS = 80;
+    private int ROWS;
+    private int COLUMNS;
     private static final int CELL_SIZE_DP = 5;
 
     private float lastX = 0, lastY = 0;
@@ -47,11 +47,17 @@ public class MainUIActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ROWS = getIntent().getIntExtra("width", 10);
+        COLUMNS = getIntent().getIntExtra("height", 10);
+
         float scale = getResources().getDisplayMetrics().density;
         int cellSizePx = (int) (CELL_SIZE_DP * scale + 0.5f);
 
         frameLayout = findViewById(R.id.mainFrame);
         gridLayout = findViewById(R.id.gridLayout);
+
+        gridLayout.setRowCount(ROWS);
+        gridLayout.setColumnCount(COLUMNS);
 
         int totalWidth = cellSizePx * COLUMNS;
         int totalHeight = cellSizePx * ROWS;
@@ -225,10 +231,10 @@ public class MainUIActivity extends AppCompatActivity {
         float adjustedX = (rawX - gridLocation[0]) / scaleX;
         float adjustedY = (rawY - gridLocation[1]) / scaleY;
 
-        float cellSizePx = CELL_SIZE_DP * getResources().getDisplayMetrics().density;
+        int cellSizePx = (int) (CELL_SIZE_DP * getResources().getDisplayMetrics().density + 0.5f);
 
-        int col = (int) (adjustedX / cellSizePx - 0.5f);
-        int row = (int) (adjustedY / cellSizePx - 0.5f);
+        int col = (int) (adjustedX / cellSizePx);
+        int row = (int) (adjustedY / cellSizePx);
 
         if (row >= 0 && row < ROWS && col >= 0 && col < COLUMNS) {
             int index = row * COLUMNS + col;

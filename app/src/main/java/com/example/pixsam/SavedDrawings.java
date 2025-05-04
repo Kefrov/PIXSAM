@@ -101,7 +101,10 @@ public class SavedDrawings extends AppCompatActivity {
             try {
                 int width = Integer.parseInt(widthStr);
                 int height = Integer.parseInt(heightStr);
-
+                if (width < 1 || width > 80 || height < 1 || height > 80) {
+                    Toast.makeText(this, "Width and height must be between 1 and 80", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent = new Intent(this, MainUIActivity.class);
                 intent.putExtra("width", width);
                 intent.putExtra("height", height);
