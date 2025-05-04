@@ -10,6 +10,7 @@ Pixel Art app for Android.
 - Eraser tool
 
 ## Dependencies
+- RecyclerView – For displaying saved drawings
 - Room – Local database support
 - [AmbilWarna](https://github.com/yukuku/ambilwarna) – Android color picker library
 
