@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SavedDrawings"/>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainUIActivity"/>
     </application>
 
 </manifest>

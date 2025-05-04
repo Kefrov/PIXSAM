@@ -33,6 +33,7 @@ android {
 
 dependencies {
     annotationProcessor(libs.room.compiler)
+    implementation(libs.ambilwarna)
     implementation(libs.room.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)

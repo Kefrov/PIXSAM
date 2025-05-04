@@ -102,7 +102,7 @@ public class SavedDrawings extends AppCompatActivity {
                 int width = Integer.parseInt(widthStr);
                 int height = Integer.parseInt(heightStr);
 
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, MainUIActivity.class);
                 intent.putExtra("width", width);
                 intent.putExtra("height", height);
                 startActivity(intent);

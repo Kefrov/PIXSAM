@@ -51,12 +51,11 @@ public class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapt
         DrawingItem curr_drawing = drawingList.get(position);
         holder.drawing_name.setText(curr_drawing.getDrawing_name());
 
-        // this listener don't work
         holder.itemView.setOnClickListener(v -> {
             // Get the drawing ID and pass it to MainActivity through Intent
-//            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(context, MainUIActivity.class);
 //            intent.putExtra("drawing_id", curr_drawing.getDrawing_id());
-//            context.startActivity(intent);
+            context.startActivity(intent);
         });
         holder.itemView.setOnLongClickListener(v -> {
             showDeleteRename(holder,curr_drawing);

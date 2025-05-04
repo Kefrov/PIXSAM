@@ -1,16 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainFrame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:background="#888888">
 
-    <TextView
-        android:id="@+id/helloText"
+    <!-- Grid that you can move freely -->
+    <GridLayout
+        android:id="@+id/gridLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:textSize="24sp" />
-</LinearLayout>
+        android:layout_gravity="center"
+        android:columnCount="80"
+        android:rowCount="80"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@+id/colorPaletteContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_marginEnd="8dp"
+        android:padding="5dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_yellow_bg"
+        android:elevation="10dp">
+
+        <ImageButton
+            android:id="@+id/color1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/circle_button"
+            android:contentDescription="@string/color_1" />
+
+        <ImageButton
+            android:id="@+id/color2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/circle_button"
+            android:contentDescription="@string/color_2" />
+
+        <ImageButton
+            android:id="@+id/color3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/circle_button"
+            android:contentDescription="@string/color_3" />
+    </LinearLayout>
+
+    <!-- Zoom buttons -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="1dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/zout"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/zoom_out"
+            android:scaleType="centerInside"
+            android:src="@drawable/search_minus" />
+
+        <ImageButton
+            android:id="@+id/zin"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/zoom_in"
+            android:scaleType="centerInside"
+            android:src="@drawable/search_plus" />
+    </LinearLayout>
+
+    <!-- Erase and Move buttons -->
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="8dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/move"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/MG"
+            android:scaleType="centerInside"
+            android:src="@drawable/move" />
+
+        <ImageButton
+            android:id="@+id/eraser"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/EP"
+            android:scaleType="centerInside"
+            android:src="@drawable/erase" />
+    </LinearLayout>
+</FrameLayout>

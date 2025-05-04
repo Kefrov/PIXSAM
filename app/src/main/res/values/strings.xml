@@ -10,4 +10,11 @@
     <string name="delete">Delete</string>
     <string name="enter_width">Enter width</string>
     <string name="enter_height">Enter height</string>
+    <string name="MG">Move grid</string>
+    <string name="EP">Erase pixel</string>
+    <string name="zoom_out">Zoom Out</string>
+    <string name="zoom_in">Zoom In</string>
+    <string name="color_1">Color 1</string>
+    <string name="color_2">Color 2</string>
+    <string name="color_3">Color 3</string>
 </resources>
