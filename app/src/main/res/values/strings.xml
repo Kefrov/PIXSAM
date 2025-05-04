@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PIXSAM</string>
+    <string name="saved_drawing">saved_drawing</string>
+    <string name="add_new_drawing">add_new_drawing</string>
+    <string name="search_for_drawing">Search for drawing</string>
+    <string name="rename_drawing">Rename drawing</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="enter_width">Enter width</string>
+    <string name="enter_height">Enter height</string>
+</resources>
