@@ -4,6 +4,7 @@ import static java.lang.Float.max;
 import static java.lang.Float.min;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +18,7 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pixsam.pixsam_db.ColoredPixel;
@@ -196,12 +198,9 @@ public class MainUIActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancel(AmbilWarnaDialog dialog) {
-                    // User clicked cancel
-                }
+                public void onCancel(AmbilWarnaDialog dialog) {}
             });
             colorPicker.show();
-
             return true;
         });
 
@@ -216,12 +215,9 @@ public class MainUIActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancel(AmbilWarnaDialog dialog) {
-                    // User clicked cancel
-                }
+                public void onCancel(AmbilWarnaDialog dialog) {}
             });
             colorPicker.show();
-
             return true;
         });
 
@@ -236,17 +232,28 @@ public class MainUIActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancel(AmbilWarnaDialog dialog) {
-                    // User clicked cancel
-                }
+                public void onCancel(AmbilWarnaDialog dialog) {}
             });
             colorPicker.show();
-
             return true;
         });
 
         ImageButton save_button = findViewById(R.id.save_button);
         save_button.setOnClickListener(v -> saveDrawing());
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "Landscape mode", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(this, "Portrait mode", Toast.LENGTH_SHORT).show();
+        }
+
+        // Optional: Refresh layout manually if needed
+        gridLayout.requestLayout();
     }
 
     private void loadDrawingById(List<ColoredPixel> coloredPixels) {
@@ -266,11 +273,11 @@ public class MainUIActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                Log.d("Cell", String.valueOf(cell));
                 gridLayout.addView(cell);
             }
         }
     }
+
     private void loadEmptyGrid() {
         gridLayout.removeAllViews();
         for (int i = 0; i < ROWS * COLUMNS; i++) {
@@ -284,6 +291,7 @@ public class MainUIActivity extends AppCompatActivity {
             gridLayout.addView(cell);
         }
     }
+
     private void saveDrawing() {
         new Thread(() -> {
             PixsamDatabase db = PixsamDatabase.getDatabase(this);
@@ -319,8 +327,6 @@ public class MainUIActivity extends AppCompatActivity {
 
         float adjustedX = (rawX - gridLocation[0]) / scaleX;
         float adjustedY = (rawY - gridLocation[1]) / scaleY;
-
-        int cellSizePx = (int) (CELL_SIZE_DP * getResources().getDisplayMetrics().density + 0.5f);
 
         int col = (int) (adjustedX / cellSizePx);
         int row = (int) (adjustedY / cellSizePx);
