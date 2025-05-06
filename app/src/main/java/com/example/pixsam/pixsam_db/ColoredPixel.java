@@ -9,14 +9,14 @@ public class ColoredPixel {
     private int id;
     private int drawingId;
     private int x, y;
-    private String colorHex;
+    private int color;
 
     // Constructor
-    public ColoredPixel(int drawingId, int x, int y, String colorHex) {
+    public ColoredPixel(int drawingId, int x, int y, int color) {
         this.drawingId = drawingId;
         this.x = x;
         this.y = y;
-        this.colorHex = colorHex;
+        this.color = color;
     }
 
     // Getter methods
@@ -36,8 +36,8 @@ public class ColoredPixel {
         return y;
     }
 
-    public String getColorHex() {
-        return colorHex;
+    public int getColor() {
+        return color;
     }
 
     // Setter methods
@@ -57,7 +57,7 @@ public class ColoredPixel {
         this.y = y;
     }
 
-    public void setColorHex(String colorHex) {
-        this.colorHex = colorHex;
+    public void setColor(int color) {
+        this.color = color;
     }
 }

@@ -23,10 +23,10 @@ public interface PixsamDao {
     List<DrawingItem> getAllDrawings();
 
     @Query("SELECT * FROM drawings WHERE drawing_id = :drawingId LIMIT 1")
-    DrawingItem getDrawingById(int drawingId);
+    DrawingItem getDrawingById(long drawingId);
     @Insert
     void insertColoredPixel(ColoredPixel pixel);
 
     @Query("SELECT * FROM pixels WHERE drawingId = :drawingId")
-    List<ColoredPixel> getPixelsForDrawing(int drawingId);
+    List<ColoredPixel> getPixelsForDrawing(long drawingId);
 }

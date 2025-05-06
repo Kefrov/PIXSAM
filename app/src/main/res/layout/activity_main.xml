@@ -11,8 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:columnCount="80"
-        android:rowCount="80"
+        android:columnCount="10"
+        android:rowCount="10"
         android:orientation="horizontal" />
 
     <LinearLayout

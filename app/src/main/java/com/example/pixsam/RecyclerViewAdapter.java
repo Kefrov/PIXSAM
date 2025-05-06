@@ -52,9 +52,11 @@ public class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapt
         holder.drawing_name.setText(curr_drawing.getDrawing_name());
 
         holder.itemView.setOnClickListener(v -> {
-            // Get the drawing ID and pass it to MainActivity through Intent
+            // Get the drawing ID and pass it to MainActivity through Intent and draw the drawing that are one the database
             Intent intent = new Intent(context, MainUIActivity.class);
-//            intent.putExtra("drawing_id", curr_drawing.getDrawing_id());
+            Log.d("item_view listener",String.valueOf(curr_drawing.getDrawing_id()));
+            intent.putExtra("drawing_id", curr_drawing.getDrawing_id());
+            intent.putExtra("source", "recycler_view_item");
             context.startActivity(intent);
         });
         holder.itemView.setOnLongClickListener(v -> {
@@ -132,7 +134,11 @@ public class RecyclerViewAdapter extends  RecyclerView.Adapter<RecyclerViewAdapt
         });
         bottomSheetDialog.show();
     }
-
+    public void updateList(List<DrawingItem> newList) {
+        this.drawingList.clear();
+        this.drawingList.addAll(newList);
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return drawingList.size();
