@@ -8,6 +8,7 @@ Pixel Art app for Android.
 - Zoom and pan the canvas
 - Draw with up to 3 custom colors using a color picker
 - Eraser tool
+- Save drawings
 
 ## Dependencies
 - RecyclerView – For displaying saved drawings
