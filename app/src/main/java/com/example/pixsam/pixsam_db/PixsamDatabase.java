@@ -8,10 +8,10 @@ import androidx.room.RoomDatabase;
 
 @Database(entities = {DrawingItem.class, ColoredPixel.class}, version = 1, exportSchema = false)
 public abstract class PixsamDatabase extends RoomDatabase {
-    public abstract PixsamDao pixsamDao(); // access to the DAO methods
+    public abstract PixsamDao pixsamDao();
     private static PixsamDatabase INSTANCE;
     public static synchronized PixsamDatabase getDatabase(Context context) {
-        // context.deleteDatabase("Pixsam_database");
+        //context.deleteDatabase("Pixsam_database");
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             PixsamDatabase.class, "Pixsam_database")

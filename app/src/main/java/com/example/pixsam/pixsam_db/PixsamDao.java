@@ -29,4 +29,7 @@ public interface PixsamDao {
 
     @Query("SELECT * FROM pixels WHERE drawingId = :drawingId")
     List<ColoredPixel> getPixelsForDrawing(long drawingId);
+
+    @Query("DELETE FROM pixels WHERE drawingId = :drawingId")
+    void deletePixelsForDrawing(int drawingId);
 }

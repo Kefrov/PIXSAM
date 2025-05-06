@@ -49,7 +49,7 @@ public class MainUIActivity extends AppCompatActivity {
     private int color3 = Color.rgb(0, 0, 255);
 
     private int selectedColor = Color.RED;
-
+    private  int drawingId = -1;
     private View lastTouchedCell = null;
 
     private int cellSizePx;
@@ -73,7 +73,7 @@ public class MainUIActivity extends AppCompatActivity {
             gridLayout.setColumnCount(COLUMNS);
             loadEmptyGrid();
         } else if (source.equals("recycler_view_item")) {
-            int drawingId = getIntent().getIntExtra("drawing_id", -1);
+            drawingId = getIntent().getIntExtra("drawing_id", -1);
             new Thread(() -> {
                 PixsamDatabase db = PixsamDatabase.getDatabase(this);
                 PixsamDao pixsam = db.pixsamDao();
@@ -296,9 +296,14 @@ public class MainUIActivity extends AppCompatActivity {
         new Thread(() -> {
             PixsamDatabase db = PixsamDatabase.getDatabase(this);
             PixsamDao pixsam = db.pixsamDao();
-            DrawingItem drawing = new DrawingItem("New Pixel Art", COLUMNS, ROWS);
-            long drawingId = pixsam.insertDrawing(drawing);
+            DrawingItem existingDrawing = pixsam.getDrawingById(drawingId);
 
+            if (existingDrawing == null) {
+                DrawingItem drawing = new DrawingItem("New Pixel Art", COLUMNS, ROWS);
+                pixsam.insertDrawing(drawing);
+            }else {
+                pixsam.deletePixelsForDrawing(drawingId);
+            }
             for (int row = 0; row < ROWS; row++) {
                 for (int col = 0; col < COLUMNS; col++) {
                     int index = row * COLUMNS + col;
