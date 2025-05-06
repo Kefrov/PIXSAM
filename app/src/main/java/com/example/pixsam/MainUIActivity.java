@@ -6,14 +6,23 @@ import static java.lang.Float.min;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+
+import com.example.pixsam.pixsam_db.ColoredPixel;
+import com.example.pixsam.pixsam_db.DrawingItem;
+import com.example.pixsam.pixsam_db.PixsamDao;
+import com.example.pixsam.pixsam_db.PixsamDatabase;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,23 +50,48 @@ public class MainUIActivity extends AppCompatActivity {
 
     private View lastTouchedCell = null;
 
+    private int cellSizePx;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ROWS = getIntent().getIntExtra("width", 10);
-        COLUMNS = getIntent().getIntExtra("height", 10);
-
-        float scale = getResources().getDisplayMetrics().density;
-        int cellSizePx = (int) (CELL_SIZE_DP * scale + 0.5f);
+        String source = getIntent().getStringExtra("source");
 
         frameLayout = findViewById(R.id.mainFrame);
         gridLayout = findViewById(R.id.gridLayout);
+        float scale = getResources().getDisplayMetrics().density;
+        cellSizePx = (int) (CELL_SIZE_DP * scale + 0.5f);
 
-        gridLayout.setRowCount(ROWS);
-        gridLayout.setColumnCount(COLUMNS);
+        if (source.equals("plus_button")) {
+            ROWS = getIntent().getIntExtra("height", 10);
+            COLUMNS = getIntent().getIntExtra("width", 10);
+            gridLayout.setRowCount(ROWS);
+            gridLayout.setColumnCount(COLUMNS);
+            loadEmptyGrid();
+        } else if (source.equals("recycler_view_item")) {
+            int drawingId = getIntent().getIntExtra("drawing_id", -1);
+            new Thread(() -> {
+                PixsamDatabase db = PixsamDatabase.getDatabase(this);
+                PixsamDao pixsam = db.pixsamDao();
+                List<ColoredPixel> coloredPixels = pixsam.getPixelsForDrawing(drawingId);
+                DrawingItem drawing = pixsam.getDrawingById(drawingId);
+
+                runOnUiThread(() -> {
+                    Log.d("UI thread",String.valueOf(drawing.getWidth()));
+                    ROWS = drawing.getHeight();
+                    COLUMNS = drawing.getWidth();
+                    gridLayout.setRowCount(ROWS);
+                    gridLayout.setColumnCount(COLUMNS);
+                    loadDrawingById(coloredPixels);
+                });
+            }).start();
+        }else {
+            Log.d("SOURCE_DEBUG", "Unknown source: " + source);
+        }
+
+
 
         int totalWidth = cellSizePx * COLUMNS;
         int totalHeight = cellSizePx * ROWS;
@@ -68,18 +102,6 @@ public class MainUIActivity extends AppCompatActivity {
 
         gridLayout.setScaleX(0.5f);
         gridLayout.setScaleY(0.5f);
-
-        gridLayout.removeAllViews();
-        for (int i = 0; i < ROWS * COLUMNS; i++) {
-            View cell = new View(this);
-            GridLayout.LayoutParams cellParams = new GridLayout.LayoutParams();
-            cellParams.width = cellSizePx;
-            cellParams.height = cellSizePx;
-            cell.setLayoutParams(cellParams);
-            cell.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
-            cell.setBackgroundResource(R.drawable.cell_border);
-            gridLayout.addView(cell);
-        }
 
         ImageButton zoomIn = findViewById(R.id.zin);
         ImageButton zoomOut = findViewById(R.id.zout);
@@ -145,7 +167,7 @@ public class MainUIActivity extends AppCompatActivity {
                 if (touchedCell != null && touchedCell != lastTouchedCell) {
                     lastTouchedCell = touchedCell;
                     if (active_button.equals("Erase pixel")) {
-                        touchedCell.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
+                        touchedCell.setBackgroundColor(Color.WHITE);
                         touchedCell.setBackgroundResource(R.drawable.cell_border);
                     } else {
                         touchedCell.setBackgroundColor(activeColor);
@@ -219,6 +241,70 @@ public class MainUIActivity extends AppCompatActivity {
 
             return true;
         });
+
+        ImageButton save_button = findViewById(R.id.save_button);
+        save_button.setOnClickListener(v -> saveDrawing());
+    }
+
+    private void loadDrawingById(List<ColoredPixel> coloredPixels) {
+        gridLayout.removeAllViews();
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                View cell = new View(this);
+                GridLayout.LayoutParams cellParams = new GridLayout.LayoutParams();
+                cellParams.width = cellSizePx;
+                cellParams.height = cellSizePx;
+                cell.setLayoutParams(cellParams);
+                cell.setBackgroundColor(Color.WHITE);
+                cell.setBackgroundResource(R.drawable.cell_border);
+                for (ColoredPixel pixel : coloredPixels) {
+                    if (pixel.getX() == row && pixel.getY() == col) {
+                        cell.setBackgroundColor(pixel.getColor());
+                        break;
+                    }
+                }
+                Log.d("Cell", String.valueOf(cell));
+                gridLayout.addView(cell);
+            }
+        }
+    }
+    private void loadEmptyGrid() {
+        gridLayout.removeAllViews();
+        for (int i = 0; i < ROWS * COLUMNS; i++) {
+            View cell = new View(this);
+            GridLayout.LayoutParams cellParams = new GridLayout.LayoutParams();
+            cellParams.width = cellSizePx;
+            cellParams.height = cellSizePx;
+            cell.setLayoutParams(cellParams);
+            cell.setBackgroundColor(Color.WHITE);
+            cell.setBackgroundResource(R.drawable.cell_border);
+            gridLayout.addView(cell);
+        }
+    }
+    private void saveDrawing() {
+        new Thread(() -> {
+            PixsamDatabase db = PixsamDatabase.getDatabase(this);
+            PixsamDao pixsam = db.pixsamDao();
+            DrawingItem drawing = new DrawingItem("New Pixel Art", COLUMNS, ROWS);
+            long drawingId = pixsam.insertDrawing(drawing);
+
+            for (int row = 0; row < ROWS; row++) {
+                for (int col = 0; col < COLUMNS; col++) {
+                    int index = row * COLUMNS + col;
+                    View cell = gridLayout.getChildAt(index);
+
+                    Drawable background = cell.getBackground();
+                    if (background instanceof ColorDrawable) {
+                        int color = ((ColorDrawable) cell.getBackground()).getColor();
+                        ColoredPixel pixel = new ColoredPixel((int) drawingId, row, col, color);
+                        pixsam.insertColoredPixel(pixel);
+                    }
+                }
+            }
+            runOnUiThread(() ->
+                    Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show()
+            );
+        }).start();
     }
 
     private View getTouchedCell(float rawX, float rawY) {

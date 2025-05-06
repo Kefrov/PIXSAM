@@ -36,25 +36,7 @@ public class SavedDrawings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.saveddrawings);
-
-        new Thread(() -> {
-            // test drawings
-            PixsamDatabase db = PixsamDatabase.getDatabase(this);
-            PixsamDao pixsam = db.pixsamDao();
-            DrawingItem drawing1 = new DrawingItem("Pixel Art 1", 5, 5); // A 5x5 grid
-            DrawingItem drawing2 = new DrawingItem("Pixel Art 2", 3, 3); // A 3x3 grid
-            long drawingId1 = pixsam.insertDrawing(drawing1);
-            long drawingId2 = pixsam.insertDrawing(drawing2);
-
-            insertTestColoredPixels(drawingId1, 5, 5);
-            insertTestColoredPixels(drawingId2, 3, 3);
-
-            List<DrawingItem> drawings = db.pixsamDao().getAllDrawings();
-
-            runOnUiThread(() -> initRecyclerView(drawings));
-        }).start();
-
-
+        loadDrawings();
         FloatingActionButton fab = findViewById(R.id.addDrawing);
         fab.setOnClickListener(v -> showGridSizeDialog());
 
@@ -74,6 +56,24 @@ public class SavedDrawings extends AppCompatActivity {
                 }
             }
         });
+    }
+    protected void onResume() {
+        super.onResume();
+        loadDrawings();
+    }
+    private void loadDrawings() {
+        new Thread(() -> {
+            PixsamDatabase db = PixsamDatabase.getDatabase(this);
+            PixsamDao pixsam = db.pixsamDao();
+            List<DrawingItem> drawings = pixsam.getAllDrawings();
+            runOnUiThread(() -> {
+                if (adapter == null) {
+                    initRecyclerView(drawings);
+                } else {
+                    adapter.updateList(drawings);
+                }
+            });
+        }).start();
     }
 
     private void showGridSizeDialog() {
@@ -108,6 +108,7 @@ public class SavedDrawings extends AppCompatActivity {
                 Intent intent = new Intent(this, MainUIActivity.class);
                 intent.putExtra("width", width);
                 intent.putExtra("height", height);
+                intent.putExtra("source", "plus_button");
                 startActivity(intent);
                 dialog.dismiss();
             } catch (NumberFormatException e) {
@@ -116,17 +117,6 @@ public class SavedDrawings extends AppCompatActivity {
         });
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
-    }
-
-
-    private void insertTestColoredPixels(long drawingId, int width, int height) {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                String color = (x + y) % 2 == 0 ? "#FF0000" : "#00FF00"; // Red for even, Green for odd
-                ColoredPixel pixel = new ColoredPixel((int) drawingId, x, y, color);
-                PixsamDatabase.getDatabase(this).pixsamDao().insertColoredPixel(pixel);
-            }
-        }
     }
     private void initRecyclerView(List<DrawingItem> drawinglist) {
         RecyclerView recyclerView = findViewById(R.id.rv);
