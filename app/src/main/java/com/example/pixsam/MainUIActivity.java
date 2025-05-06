@@ -79,19 +79,22 @@ public class MainUIActivity extends AppCompatActivity {
                 DrawingItem drawing = pixsam.getDrawingById(drawingId);
 
                 runOnUiThread(() -> {
-                    Log.d("UI thread",String.valueOf(drawing.getWidth()));
                     ROWS = drawing.getHeight();
                     COLUMNS = drawing.getWidth();
                     gridLayout.setRowCount(ROWS);
                     gridLayout.setColumnCount(COLUMNS);
+
+                    int totalWidth = cellSizePx * COLUMNS;
+                    int totalHeight = cellSizePx * ROWS;
+                    gridLayout.getLayoutParams().width = totalWidth;
+                    gridLayout.getLayoutParams().height = totalHeight;
+                    gridLayout.requestLayout();
+
                     loadDrawingById(coloredPixels);
                 });
+
             }).start();
-        }else {
-            Log.d("SOURCE_DEBUG", "Unknown source: " + source);
         }
-
-
 
         int totalWidth = cellSizePx * COLUMNS;
         int totalHeight = cellSizePx * ROWS;
