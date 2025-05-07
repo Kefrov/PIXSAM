@@ -11,7 +11,6 @@ public class ColoredPixel {
     private int x, y;
     private int color;
 
-    // Constructor
     public ColoredPixel(int drawingId, int x, int y, int color) {
         this.drawingId = drawingId;
         this.x = x;
@@ -19,7 +18,6 @@ public class ColoredPixel {
         this.color = color;
     }
 
-    // Getter methods
     public int getId() {
         return id;
     }
@@ -40,7 +38,6 @@ public class ColoredPixel {
         return color;
     }
 
-    // Setter methods
     public void setId(int id) {
         this.id = id;
     }

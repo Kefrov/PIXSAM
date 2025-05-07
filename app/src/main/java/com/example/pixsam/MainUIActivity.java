@@ -300,7 +300,8 @@ public class MainUIActivity extends AppCompatActivity {
 
             if (existingDrawing == null) {
                 DrawingItem drawing = new DrawingItem("New Pixel Art", COLUMNS, ROWS);
-                pixsam.insertDrawing(drawing);
+                drawingId = (int) pixsam.insertDrawing(drawing);
+
             }else {
                 pixsam.deletePixelsForDrawing(drawingId);
             }
@@ -312,7 +313,7 @@ public class MainUIActivity extends AppCompatActivity {
                     Drawable background = cell.getBackground();
                     if (background instanceof ColorDrawable) {
                         int color = ((ColorDrawable) cell.getBackground()).getColor();
-                        ColoredPixel pixel = new ColoredPixel((int) drawingId, row, col, color);
+                        ColoredPixel pixel = new ColoredPixel(drawingId, row, col, color);
                         pixsam.insertColoredPixel(pixel);
                     }
                 }
