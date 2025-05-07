@@ -11,6 +11,7 @@ Pixel Art app for Android.
 - Save drawings
 
 ## Dependencies
+- Java
 - RecyclerView – For displaying saved drawings
 - Room – Local database support
 - [AmbilWarna](https://github.com/yukuku/ambilwarna) – Android color picker library
